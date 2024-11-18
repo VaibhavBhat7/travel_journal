@@ -39,7 +39,7 @@ const Map = ({ trips }) => {
     <MapContainer
       center={userLocation ? [userLocation.lat, userLocation.lng] : [22, 80]} // Center map on user location
       zoom={5}
-      style={{ height: "95vh", width: "98vw", borderRadius: "5px" }}
+      style={{ height: "86vh", width: "98vw", borderRadius: "5px" }}
       whenReady={() => {
         if (userLocation) {
           // Center the map once the user's location is available
