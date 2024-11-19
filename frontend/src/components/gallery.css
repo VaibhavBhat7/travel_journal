@@ -16,6 +16,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  /* margin-bottom: 20px ; */
 }
 
 .gallery-images {
@@ -24,8 +25,16 @@
   gap: 10px; /* Optional gap between photos */
 }
 
+.gallery-image {
+  display: flex;
+  flex-direction: column; /* Stack image and button vertically */
+  align-items: center; /* Center-align the image and button */
+  margin-bottom: 20px; /* Add space below the entire image container */
+}
+
+
 .gallery-image img {
-  border: 2px solid #ccc;
+  border: 1.5px solid rgb(252, 254, 176);
   border-radius: 5px;
   width: 100%;
   height: 100%;
@@ -45,3 +54,16 @@ h3{
   margin: 0px; */
 }
 
+.delete-button {
+  margin-top: 5px;
+  background-color: greenyellow;
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.delete-button:hover {
+  background-color: rgb(152, 199, 82);
+}

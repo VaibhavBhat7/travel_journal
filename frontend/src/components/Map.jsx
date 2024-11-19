@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import '../styles/Map.css'; // Importing external CSS
 
 // Custom marker icon for user location
 const userIcon = new L.Icon({
@@ -14,6 +15,8 @@ const userIcon = new L.Icon({
 const Map = ({ trips }) => {
   const [userLocation, setUserLocation] = useState(null);
   const [error, setError] = useState(null);
+  const [customMarkers, setCustomMarkers] = useState([]); // State for user-added markers
+  const [mapClickDisabled, setMapClickDisabled] = useState(false); // Disable map clicks temporarily
 
   // Fetch user's current location
   useEffect(() => {
@@ -35,18 +38,46 @@ const Map = ({ trips }) => {
     }
   }, []);
 
+  // Component to handle map clicks and add new markers
+  const AddMarkerOnClick = () => {
+    useMapEvents({
+      click: (e) => {
+        if (!mapClickDisabled) {
+          const { lat, lng } = e.latlng;
+          const newMarker = {
+            id: Date.now(), // Unique ID for the marker
+            position: { lat, lng },
+            title: "", // Default empty title
+            description: "", // Default empty description
+          };
+          setCustomMarkers([...customMarkers, newMarker]); // Add marker to the state
+        }
+      },
+    });
+    return null; // This component doesn't render anything on the map
+  };
+
+  // Function to update a marker's details
+  const updateMarker = (id, updatedData) => {
+    setCustomMarkers(
+      customMarkers.map((marker) =>
+        marker.id === id ? { ...marker, ...updatedData } : marker
+      )
+    );
+  };
+
+  // Function to delete a marker
+  const deleteMarker = (id) => {
+    setMapClickDisabled(true); // Temporarily disable map clicks
+    setCustomMarkers(customMarkers.filter((marker) => marker.id !== id));
+    setTimeout(() => setMapClickDisabled(false), 100); // Re-enable map clicks after a short delay
+  };
+
   return (
     <MapContainer
       center={userLocation ? [userLocation.lat, userLocation.lng] : [22, 80]} // Center map on user location
       zoom={5}
-      style={{ height: "86vh", width: "98vw", borderRadius: "5px" }}
-      whenReady={() => {
-        if (userLocation) {
-          // Center the map once the user's location is available
-          const map = document.querySelector('.leaflet-container').__leaflet;
-          map.setView([userLocation.lat, userLocation.lng], 13); // You can adjust the zoom level (13 here)
-        }
-      }}
+      className="map-container"
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
@@ -72,8 +103,46 @@ const Map = ({ trips }) => {
         </Marker>
       ))}
 
+      {/* Show custom markers */}
+      {customMarkers.map((marker) => (
+        <Marker position={[marker.position.lat, marker.position.lng]} key={marker.id}>
+          <Popup className="popup-container">
+            <label>
+              Title:
+              <input
+                type="text"
+                value={marker.title}
+                onChange={(e) =>
+                  updateMarker(marker.id, { title: e.target.value.toUpperCase() })
+                }
+                className="popup-title-input"
+              />
+            </label>
+            <label>
+              Description:
+              <textarea
+                value={marker.description}
+                onChange={(e) =>
+                  updateMarker(marker.id, { description: e.target.value })
+                }
+                className="popup-description-textarea"
+              />
+            </label>
+            <button
+              className="popup-delete-button"
+              onClick={() => deleteMarker(marker.id)}
+            >
+              Delete Marker
+            </button>
+          </Popup>
+        </Marker>
+      ))}
+
+      {/* Component to add markers on map click */}
+      <AddMarkerOnClick />
+
       {/* Error handling */}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="error-text">{error}</p>}
     </MapContainer>
   );
 };
