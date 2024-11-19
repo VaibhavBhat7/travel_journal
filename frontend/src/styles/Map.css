@@ -1,0 +1,81 @@
+/* Style for the Map Container */
+.map-container {
+  height: 82vh;
+  width: 90vw;
+  border-radius: 8px;
+}
+
+/* Style for the Popup Container */
+.popup-container {
+  background-color: #2c2c2c;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Style for the Title Input */
+.popup-title-input {
+  width: 100%;
+  margin-bottom: 5px;
+  background-color: #1a1a1a;
+  color: greenyellow;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+  padding: 5px;
+  border-radius: 3px;
+  outline: none;
+}
+
+/* Style for the Description Textarea */
+.popup-description-textarea {
+  width: 100%;
+  max-height: 110px;
+  overflow-y: scroll;
+  margin-bottom: 10px;
+  background-color: #1a1a1a;
+  color: greenyellow;
+  border: none;
+  padding: 5px;
+  border-radius: 3px;
+  outline: none;
+  resize: none; /* Prevent resizing */
+}
+
+/* Style for the Delete Button */
+.popup-delete-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.popup-delete-button:hover {
+  background-color: darkred;
+}
+
+/* Style for the Error Text */
+.error-text {
+  color: red;
+  font-size: 14px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+/* Add styles for the photo upload and preview */
+.popup-photo-upload {
+  margin-bottom: 10px;
+}
+
+.popup-photo {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-top: 5px;
+}

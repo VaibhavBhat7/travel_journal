@@ -9,6 +9,11 @@ const GalleryPage = () => {
 
   // Fetch images from the backend when the component is mounted
   useEffect(() => {
+    fetchImages();
+  }, []);
+
+  // Function to fetch images from the server
+  const fetchImages = () => {
     axios
       .get('http://localhost:5000/api/gallery') // Adjust if your API endpoint differs
       .then((response) => {
@@ -18,7 +23,7 @@ const GalleryPage = () => {
         console.error(err);
         setError('Error fetching images from the server');
       });
-  }, []);
+  };
 
   // Handle image selection
   const handleImageChange = (e) => {
@@ -51,6 +56,19 @@ const GalleryPage = () => {
       });
   };
 
+  // Handle deleting an image
+  const handleDeleteImage = (filename) => {
+    axios
+      .delete(`http://localhost:5000/api/gallery/${filename}`) // DELETE endpoint
+      .then(() => {
+        setImages(images.filter((img) => img.filePath !== `/uploads/${filename}`)); // Remove deleted image from state
+      })
+      .catch((err) => {
+        console.error(err);
+        setError('Error deleting the image');
+      });
+  };
+
   return (
     <div className="gallery-page">
       <h2>Gallery</h2>
@@ -79,6 +97,14 @@ const GalleryPage = () => {
                   src={`http://localhost:5000${image.filePath}`} // Ensure this matches the backend response
                   alt={`Gallery Image ${index}`}
                 />
+                <button
+                  className="delete-button"
+                  onClick={() =>
+                    handleDeleteImage(image.filePath.split('/').pop())
+                  }
+                >
+                  Delete
+                </button>
               </div>
             ))
           ) : (
